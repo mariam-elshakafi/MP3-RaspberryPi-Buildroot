@@ -1,0 +1,26 @@
+### Loopback adapter ###
+
+auto lo
+iface lo inet loopback
+
+### Ethernet adapter ###
+
+auto eth0
+iface eth0 inet static
+   wait-delay 30
+   pre-up /etc/network/nfs_check
+   address 192.168.5.30
+   netmask 255.255.255.0
+   gateway 192.168.5.1
+
+### WiFi adapter ###
+
+auto wlan0
+iface wlan0 inet static
+   wait-delay 30
+   pre-up wpa_supplicant -B -Dwext -iwlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
+   post-down killall -q wpa_supplicant
+   address 192.168.1.30
+   netmask 255.255.255.0
+   gateway 192.168.1.1
+
