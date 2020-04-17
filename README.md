@@ -34,7 +34,8 @@ If your USB is detected, the system will count how many songs available and noti
 ## Tutorial
 
 First, we need to load basic Raspberry Pi 3 configurations through the command:
-make raspberrypi3_64_defconfig
+
+> make raspberrypi3_64_defconfig
 
 In make menuconfig, do the following:
 
@@ -46,10 +47,11 @@ We need to use glibc instead of uclibc, as available mp3 applications (madplay, 
 We need to update our device manager to be able to recognize WiFi and Bluetooth interfaces (You can use mdev, or eudev)
 ![dev](../assets/Menuconfig/System_Configuration/dev-management.png?raw=true)
 
-Also, since we didn't allow ssh empty password in sshd_config, we'll need to assign a password or root user
+Also, since we didn't allow ssh empty password in sshd_config, we'll need to assign a password for root user
 ![password](../assets/Menuconfig/System_Configuration/password.png?raw=true)
 
 Don't forget to add paths to overlay folder, and your post-build script
+
 **Note:** Don't remove the path for the original Raspberry Pi post-build script, instead just separate paths with a space :D
 ![postbuild](../assets/Menuconfig/System_Configuration/post-build.png?raw=true)
 
