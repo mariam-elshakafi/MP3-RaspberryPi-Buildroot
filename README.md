@@ -44,14 +44,14 @@ We need to use glibc instead of uclibc, as available mp3 applications (madplay, 
 
 ### System Configuration
 We need to update our device manager to be able to recognize WiFi and Bluetooth interfaces (You can use mdev, or eudev)
-![dev](../assets/Menuconfig/System Configuration/dev-management.png?raw=true)
+![dev](../assets/Menuconfig/System_Configuration/dev-management.png?raw=true)
 
 Also, since we didn't allow ssh empty password in sshd_config, we'll need to assign a password or root user
-![password](../assets/Menuconfig/System Configuration/password.png?raw=true)
+![password](../assets/Menuconfig/System_Configuration/password.png?raw=true)
 
 Don't forget to add paths to overlay folder, and your post-build script
 **Note:** Don't remove the path for the original Raspberry Pi post-build script, instead just separate paths with a space :D
-![postbuild](../assets/Menuconfig/System Configuration/post-build.png?raw=true)
+![postbuild](../assets/Menuconfig/System_Configuration/post-build.png?raw=true)
 
 ### Filesystem Image
 The size of the image need to be increased for extra packages
@@ -110,15 +110,18 @@ HDMI is already supported, but you will face a problem with the audio output if 
 So, we need to add these lines to /boot/config.txt
 
 > hdmi_safe=1
+
 > hdmi_drive=2
 
 **Note:** just like sound card, post-build will be updated to do this automatically.
 
 To switch audio output to HDMI, just write this command:
-amixer cset numid=3 2
+
+> amixer cset numid=3 2
 
 To switch audio output to audiojack, write this command:
-amixer cset numid=3 1
+
+> amixer cset numid=3 1
 
 ### Bluetooth Support
 
