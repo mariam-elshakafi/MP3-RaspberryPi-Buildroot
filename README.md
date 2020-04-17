@@ -37,7 +37,9 @@ First, we need to load basic Raspberry Pi 3 configurations through the command:
 
 > make raspberrypi3_64_defconfig
 
-In make menuconfig, do the following:
+## Menuconfig
+
+> make menuconfig
 
 ### Toolchain
 We need to use glibc instead of uclibc, as available mp3 applications (madplay, mpg123) need this to start working
@@ -147,3 +149,16 @@ Since bluez 5 no more supports bluealsa, we need another audio interface which i
 
 In Target packages --> Audio/ Video, we include espeak
 ![espeak](../assets/Menuconfig/Target_Audio/espeak.png?raw=true)
+
+## Busybox config
+
+> make busybox-menuconfig
+
+### rfkill
+you might have problems with your network interfaces (They can be blocked for some reasons). 
+A good diagnostics step is to use rfkill.
+This can be found in **Miscellaneous Utilities**.
+
+### shuf
+For shuffling, we used $RANDOM in our scripts. 
+However, if you prefer shuf command, you can enable this via **Coreutils**.
