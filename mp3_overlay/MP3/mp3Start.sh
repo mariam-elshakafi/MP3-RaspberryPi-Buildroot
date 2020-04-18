@@ -1,5 +1,6 @@
 #!/bin/sh
 
+#Flags to be used for execution of certain actions :D
 songsFile=/Songs/songList
 songNum=`cat /tmp/songNum`
 mp3_state=`cat /tmp/mp3_state`
@@ -13,7 +14,7 @@ shuf_flag=`cat /tmp/shuf_flag`
 prevButtonPressed=`cat /tmp/prevButtonPressed`
 prevTimeCount=`cat /tmp/prevTimeCount`
 
-#Reading Buttons
+#Reading Buttons, changing flag values based on button press
  if [ $(cat /sys/class/gpio/gpio2/value) -eq 0 ]; then
    if [ $stop_on_next_click -eq 1 ]; then
      pause_flag=1
@@ -45,7 +46,7 @@ if [ $prevButtonPressed -eq 1 ]; then
    fi  
 fi
 
-#Performing Action
+#Performing Actions based on current raised flag
 songName=`cat $songsFile | sed -n "$songNum"p`
 if [ $start_flag -eq 1 ]; then
   start_flag=0
@@ -96,6 +97,7 @@ elif [ $shuf_flag -eq 1 ]; then
   madplay -Q $songName &
 fi
 
+#Update flag status
 echo $start_flag > /tmp/start_flag                        
 echo $stop_on_next_click > /tmp/stop_on_next_click        
 echo $next_flag > /tmp/next_flag                          
@@ -107,4 +109,5 @@ echo $prevButtonPressed > /tmp/prevButtonPressed
 echo $prevTimeCount > /tmp/prevTimeCount
 echo $songNum > /tmp/songNum
 echo $mp3_state > /tmp/mp3_state
+
 exit 0

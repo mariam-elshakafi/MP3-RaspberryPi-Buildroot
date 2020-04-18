@@ -1,12 +1,13 @@
 #!/bin/sh
+#This script is a scheduler that initializes, and calls other scripts necessary to run mp3.
 
-#Initializations
+#Load sound card driver
 driverLoadedFlag=`lsmod | grep snd_bcm2835 | wc -w`
 if [ $driverLoadedFlag -eq 0 ]; then
   modprobe snd-bcm2835
 fi
 
-#Initializing flags used in mp3 player script mp3Start.sh
+#Initializing execution flags used in mp3 player script mp3Start.sh
 echo '0' > /tmp/start_flag                      
 echo '0' > /tmp/stop_on_next_click      
 echo '0' > /tmp/next_flag                        
@@ -36,6 +37,7 @@ echo "in" > /sys/class/gpio/gpio17/direction 2> /dev/null
 songsFile=/Songs/songList
 find /Songs -name '*.mp3' > $songsFile
 
+#Main execution loop
 while :
 do
     sh /MP3/mountsCheck.sh &

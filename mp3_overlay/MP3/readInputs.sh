@@ -1,4 +1,5 @@
 #!/bin/sh
+#This script continously checks for terminal commands, updates execution flags based on them.
 
 read -t 0.2 mp3Com
 
