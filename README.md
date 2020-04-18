@@ -64,12 +64,9 @@ The size of the image need to be increased for extra packages
 ### Basic Audio Support
 
 First, we need to enable sound card through /boot/config.txt.
-Since original rpi-firmware is found folder "packages/rpi-firmware".
-Edit config.txt inside this folder **before building**, and add this line:
+The post-build script adds this line to output/images/rpi-firmware/config.txt
 
 > dtparam=audio=on
-
-**Note:** The post-build script will be updated to add this line automatically.
 
 In Libraries --> Audio/ Video Support, we enable ALSA support through alsa-lib (All)
 ![alsa-lib](../assets/Menuconfig/Libraries/alsa-lib.png?raw=true)
@@ -85,7 +82,7 @@ In Target packages --> Audio/ Video, we need a suitable mp3 player (madplay, mpg
 ![madplay](../assets/Menuconfig/Target_Audio/madplay.png?raw=true)
 ![mpg123](../assets/Menuconfig/Target_Audio/mpg123.png?raw=true)
 
-**Note:** until nowm our scripts use madplay. But, mpg123 was included for testing voice over Bluetooth.
+**Note:** until now, our scripts use madplay. But, mpg123 was included for testing voice over Bluetooth.
 
 ### ssh Support
 
@@ -111,13 +108,12 @@ You can also change IPs through
 ### HDMI Support
 
 HDMI is already supported, but you will face a problem with the audio output if HDMI wasn't connected before booting.
-So, we need to add these lines to /boot/config.txt
+So, our post-build adds these lines to output/images/rpi-firmware/config.txt
 
 > hdmi_safe=1
 
 > hdmi_drive=2
 
-**Note:** just like sound card, post-build will be updated to do this automatically.
 
 To switch audio output to HDMI, just write this command:
 
@@ -131,7 +127,8 @@ To switch audio output to audiojack, write this command:
 
 The chip used for Bluetooth in Raspberry Pi is by default used for the serial terminal, so we need to change that through /boot/cmdline.txt
 Instead of using **ttyAMA0**, we write **ttyS0**; so ttyAMA0 can be used as Bluetooth interface.
-Note: Again, you need to edit packages/rpi-firmware/cmdline.txt. In future version, post-build will be updated to do this automatically.
+
+The post-build script swaps those two in output/images/rpi-firmware/cmdline.txt
 
 In Target packages --> Hardware handling --> Firmware, we need to enable Bluetooth firmware
 ![bluetooth](../assets/Menuconfig/Hardware_Firmware/bluetooth.png?raw=true)
