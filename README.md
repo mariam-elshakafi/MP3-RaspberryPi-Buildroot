@@ -139,8 +139,27 @@ In Target packages --> Networking, check bluez-utils 5
 In Target packages --> Networking, check bluez-tools
 ![bluez-tools](../assets/Menuconfig/Target_Network/bluez-tools.png?raw=true)
 
-Since bluez 5 no more supports bluealsa, we need another audio interface which is PulseAudio
+Since alsa doesn't support bluez 5, we have one of 3 options:
+
+- **ALSA + Bluez (<=4):** 
+  However, support for bcm43xx was introduced in Bluez 5. So, it's hard to bring up the bluetooth interface using older Bluez versions.
+  We tried replacing hciattach binary with that of Bluez 5. The interface was up, connected to headset, but no sound output.
+
+- **ALSA + Bluez 5 + bluealsa:**
+  This should be a valid option. However, there's a problem with alsa not recognizing bluealsa as a pcm, although the bluealsa configurations exist.
+
+- **ALSA + Bluez 5 + PulseAudio:**
+  This seems the most promising option as of yet. Although you'll need to install jackd server to manage access to sound card. So, ALSA wouldn't bring PulseAudio down.
+  Also, sox can be used to play music through Bluetooth using **play** command.
+
+Needed packages for option 3:
+
+In Target packages --> Audio/ Video, include pulseaudio (start as system daemon)
 ![pulse](../assets/Menuconfig/Target_Audio/pulseaudio.png?raw=true)
+
+In Target packages --> Audio/ Video, include jack1
+
+In Target packages --> Audio/ Video, include sox
 
 ### Text-to-Speech
 

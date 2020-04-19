@@ -1,0 +1,38 @@
+#!/bin/sh
+
+PATH=/sbin:/bin:/usr/bin
+DAEMON="/MP3/audioDeviceManager.sh"
+test -f ${DAEMON} || exit 0
+
+startdaemon(){
+  echo -n "Starting ${DAEMON}: "
+  start-stop-daemon -b --start --quiet --exec ${DAEMON}
+  echo "${DAEMON} started."
+}
+
+stopdaemon(){
+  echo -n "Stopping ${DAEMON}: "
+  start-stop-daemon --stop --quiet --exec ${DAEMON}
+  echo "${DAEMON} stopped."
+}
+
+case "$1" in
+  start)
+      startdaemon
+      ;;
+  stop)
+      stopdaemon
+      ;;
+  force-reload)
+      stopdaemon
+      startdaemon
+      ;;
+  restart)
+      stopdaemon
+      startdaemon
+      ;;
+  *)
+      echo "Usage: $0 { start | stop | restart}" >&2
+      exit 1
+      ;;
+esac
