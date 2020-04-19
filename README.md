@@ -175,6 +175,43 @@ you might have problems with your network interfaces (They can be blocked for so
 A good diagnostics step is to use rfkill.
 This can be found in **Miscellaneous Utilities**.
 
+
 ### shuf
 For shuffling, we used $RANDOM in our scripts. 
 However, if you prefer shuf command, you can enable this via **Coreutils**.
+
+
+
+## References
+
+**WiFi**
+
+- https://blog.crysys.hu/2018/06/enabling-wifi-and-converting-the-raspberry-pi-into-a-wifi-ap/
+
+
+**Bluetooth**
+
+General:
+
+- https://tewarid.github.io/2014/10/29/bluetooth-on-raspberry-pi-with-buildroot.html
+- https://www.linux-magazine.com/Issues/2017/197/Command-Line-bluetoothctl
+
+Bluez 3 problems:
+
+- https://www.raspberrypi.org/forums/viewtopic.php?t=147919&start=25
+
+PulseAudio problems:
+
+- https://oldwiki.archive.openwrt.org/doc/howto/bluetooth.audio
+- https://github.com/Katee/quietnet/issues/18
+
+Bluealsa problems:
+
+- https://github.com/Arkq/bluez-alsa
+- https://forum.armbian.com/topic/6480-bluealsa-bluetooth-audio-using-alsa-not-pulseaudio/
+- https://askubuntu.com/questions/713145/how-do-i-connect-bluez-alsa-to-an-audio-device
+- https://www.raspberrypi.org/forums/viewtopic.php?t=107144
+
+**HDMI**
+
+- https://www.raspberrypi.org/documentation/configuration/audio-config.md
