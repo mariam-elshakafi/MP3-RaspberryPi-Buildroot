@@ -212,6 +212,10 @@ Bluealsa problems:
 - https://askubuntu.com/questions/713145/how-do-i-connect-bluez-alsa-to-an-audio-device
 - https://www.raspberrypi.org/forums/viewtopic.php?t=107144
 
+RPI defconfig for base 32 problems:
+
+- https://stackoverflow.com/questions/44554255/bcm43xx-init-initialization-timed-out-with-buildroot-raspberry-pi-3-hciattach
+
 **HDMI**
 
 - https://www.raspberrypi.org/documentation/configuration/audio-config.md
