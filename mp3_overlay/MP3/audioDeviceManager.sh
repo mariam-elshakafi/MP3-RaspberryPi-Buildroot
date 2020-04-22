@@ -21,7 +21,6 @@ do
       espeak -ven+f5 -s200 "Audio jack connected" --stdout | aplay
     #TODO: if no device is plugged 
     else
-      echo '1' > /tmp/pause_flag
-      espeak -ven+f5 -s200 "No audio device connected" --stdout | aplay 
+      echo '1' > /tmp/pause_flag 
     fi
 done
