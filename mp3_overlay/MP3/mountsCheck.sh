@@ -40,5 +40,5 @@ done
 if [ $mounted_flag -eq 1 ]; then                                                                            
   songCount=`cat $songsFile | wc -l`                                                                        
   espeak -ven+f5 -s200 "media mounted, now you have $songCount songs" --stdout | aplay                      
-  mounted_flag=0                                                                                            
+  mounted_flag=0                                                                                           
 fi

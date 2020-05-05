@@ -35,14 +35,16 @@ If your USB is detected, the system will count how many songs available and noti
 
 First, we need to load basic Raspberry Pi 3 configurations through the command:
 
-> make raspberrypi3_64_defconfig
+> make raspberrypi3_defconfig
+
+As we're using rpi-userland for HDMI detection, make sure you start with 32 base (The package is not available for 64 base).
 
 ## Menuconfig
 
 > make menuconfig
 
 ### Toolchain
-We need to use glibc instead of uclibc, as available mp3 applications (madplay, mpg123) need this to start working
+We need to use **glibc** instead of **uclibc**, as available mp3 applications (madplay, mpg123, sox) need this to start working
 ![glibc](../assets/Menuconfig/Toolchain/glibc.png?raw=true)
 
 ### System Configuration
@@ -52,10 +54,15 @@ We need to update our device manager to be able to recognize WiFi and Bluetooth 
 Also, since we didn't allow ssh empty password in sshd_config, we'll need to assign a password for root user
 ![password](../assets/Menuconfig/System_Configuration/password.png?raw=true)
 
-Don't forget to add paths to overlay folder, and your post-build script
+Don't forget to add paths to overlay folder, post-build script, and post-image script.
 
-**Note:** Don't remove the path for the original Raspberry Pi post-build script, instead just separate paths with a space :D
+**Notes:** 
+
+1. Don't remove the path for the original Raspberry Pi post-build script or post-image, instead just separate paths with a space :D
 ![postbuild](../assets/Menuconfig/System_Configuration/post-build.png?raw=true)
+
+2. The rpi default post-image generates the sdcard.img. So, you have to execute the mp3-post-image first.\
+This is done by providing the paths to post-image scripts in order (mp3 first, default second) as found in our defconfig.
 
 ### Filesystem Image
 The size of the image need to be increased for extra packages
@@ -68,21 +75,18 @@ The post-build script adds this line to output/images/rpi-firmware/config.txt
 
 > dtparam=audio=on
 
-In Libraries --> Audio/ Video Support, we enable ALSA support through alsa-lib (All)
+In Libraries --> Audio/ Sound Support, we enable ALSA support through alsa-lib (All)
 ![alsa-lib](../assets/Menuconfig/Libraries/alsa-lib.png?raw=true)
 
-In Libraries --> Audio/ Video Support, check port-audio with ALSA support
+In Libraries --> Audio/ Sound Support, check port-audio with ALSA support
 ![port-audio](../assets/Menuconfig/Libraries/port-alsa.png?raw=true)
 
 
 In Target packages --> Audio/ Video, check alsa-utils (Check them all :D)
 ![alsa-utils](../assets/Menuconfig/Target_Audio/alsa-utils.png?raw=true)
 
-In Target packages --> Audio/ Video, we need a suitable mp3 player (madplay, mpg123 ..etc)
-![madplay](../assets/Menuconfig/Target_Audio/madplay.png?raw=true)
-![mpg123](../assets/Menuconfig/Target_Audio/mpg123.png?raw=true)
-
-**Note:** until now, our scripts use madplay. But, mpg123 was included for testing voice over Bluetooth.
+In Target packages --> Audio/ Video, we need a suitable mp3 player (madplay, mpg123 ..etc).\
+For Bluetooth problems, **sox** was our best option. It can be used to play music using **play** command.
 
 ### ssh Support
 
@@ -110,8 +114,6 @@ You can also change IPs through
 HDMI is already supported, but you will face a problem with the audio output if HDMI wasn't connected before booting.
 So, our post-build adds these lines to output/images/rpi-firmware/config.txt
 
-> hdmi_safe=1
-
 > hdmi_drive=2
 
 
@@ -123,6 +125,8 @@ To switch audio output to audiojack, write this command:
 
 > amixer cset numid=3 1
 
+This is done in /MP3/audioDeviceManager.sh
+
 ### Bluetooth Support
 
 The chip used for Bluetooth in Raspberry Pi is by default used for the serial terminal, so we need to change that through /boot/cmdline.txt
@@ -130,8 +134,7 @@ Instead of using **ttyAMA0**, we write **ttyS0**; so ttyAMA0 can be used as Blue
 
 The post-build script swaps those two in output/images/rpi-firmware/cmdline.txt
 
-In Target packages --> Hardware handling --> Firmware, we need to enable Bluetooth firmware
-![bluetooth](../assets/Menuconfig/Hardware_Firmware/bluetooth.png?raw=true)
+In Target packages --> Hardware handling --> Firmware, we need to enable Bluetooth/WiFi chip firmware: **b43-firmware**
 
 In Target packages --> Networking, check bluez-utils 5
 ![bluez-utils](../assets/Menuconfig/Target_Network/bluez-utils.png?raw=true)
@@ -149,21 +152,22 @@ Since alsa doesn't support bluez 5, we have one of 3 options:
   This should be a valid option. However, there's a problem with alsa not recognizing bluealsa as a pcm, although the bluealsa configurations exist.
 
 - **ALSA + Bluez 5 + PulseAudio:**
-  This seems the most promising option as of yet. Although you'll need to install jackd server to manage access to sound card. So, ALSA wouldn't bring PulseAudio down.
-  Also, sox can be used to play music through Bluetooth using **play** command.
+  This has been the most successful option. Although you'll need to install jackd server to manage access to sound card. So, ALSA wouldn't bring PulseAudio down.
 
 Needed packages for option 3:
 
 In Target packages --> Audio/ Video, include pulseaudio (start as system daemon)
 ![pulse](../assets/Menuconfig/Target_Audio/pulseaudio.png?raw=true)
 
-In Target packages --> Audio/ Video, include jack1
+*Our mp3-overlay changes some pulseaudio options to work on Bluetooth properly.*
 
-In Target packages --> Audio/ Video, include sox
+In Target packages --> Audio/ Video, include **jack1**
+
+In Target packages --> Libraries --> Audio/ Sound, include **sbc**
 
 ### Text-to-Speech
 
-In Target packages --> Audio/ Video, we include espeak
+In Target packages --> Audio/ Video, include espeak
 ![espeak](../assets/Menuconfig/Target_Audio/espeak.png?raw=true)
 
 ## Busybox config

@@ -50,21 +50,21 @@ fi
 songName=`cat $songsFile | sed -n "$songNum"p`
 if [ $start_flag -eq 1 ]; then
   start_flag=0
-  processFound=`pidof madplay | wc -w`
+  processFound=`pidof play | wc -w`
   if [ $processFound -eq 1 ]; then
-    killall -CONT madplay 
+    killall -CONT play 
   else
-    madplay -Q $songName & 
+    play -q $songName & 
   fi
   mp3_state="NOW PLAYING:   `basename $songName`" 
 elif [ $pause_flag -eq 1 ]; then
   pause_flag=0
-  killall -STOP madplay
+  killall -STOP play
   mp3_state="MP3 Paused!" 
 elif [ $restart_flag -eq 1 ]; then
   restart_flag=0
-  killall madplay
-  madplay -Q $songName & 
+  killall play
+  play -q $songName & 
 elif [ $next_flag -eq 1 ]; then
   next_flag=0
   if [ $songNum -ne `cat $songsFile | wc -l` ]; then   
@@ -73,9 +73,9 @@ elif [ $next_flag -eq 1 ]; then
      songNum=1                                          
   fi             
   songName=`cat $songsFile | sed -n "$songNum"p` 
-  killall madplay
+  killall play 2> /dev/null
   mp3_state="NOW PLAYING:   `basename $songName`"  
-  madplay -Q $songName & 
+  play -q $songName & 
 elif [ $prev_flag -eq 1 ]; then
   prev_flag=0
   if [ $songNum -ne 1 ]; then                      
@@ -84,17 +84,17 @@ elif [ $prev_flag -eq 1 ]; then
     songNum=`cat $songsFile | wc -l`               
   fi      
   songName=`cat $songsFile | sed -n "$songNum"p` 
-  killall madplay 2> /dev/null
+  killall play 2> /dev/null
   mp3_state="NOW PLAYING:   `basename $songName`" 
-  madplay -Q $songName &
+  play -q $songName &
 elif [ $shuf_flag -eq 1 ]; then
   shuf_flag=0
   songCount=`cat $songsFile | wc -l`
   songNum=$((1+RANDOM%songCount))
   songName=`cat $songsFile | sed -n "$songNum"p` 
-  killall madplay 2> /dev/null
+  killall play 2> /dev/null
   mp3_state="NOW PLAYING:   `basename $songName`" 
-  madplay -Q $songName &
+  play -q $songName &
 fi
 
 #Update flag status
