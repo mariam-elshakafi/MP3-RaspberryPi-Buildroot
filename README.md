@@ -64,6 +64,8 @@ Don't forget to add paths to overlay folder, post-build script, and post-image s
 2. The rpi default post-image generates the sdcard.img. So, you have to execute the mp3-post-image first.\
 This is done by providing the paths to post-image scripts in order (mp3 first, default second) as found in our defconfig.
 
+3. **IMPORTANT**: the default post-image for 32 base add miniuart overlay in config.txt because of the input argument passed to the post-image, which occupies the chip used for Bluetooth (terminal: ttyAMA0) and uses it for serial. So, you have to remove the extra argument passed to post-image!
+
 ### Filesystem Image
 The size of the image need to be increased for extra packages
 ![image](../assets/Menuconfig/filesystem.png?raw=true)
@@ -71,48 +73,50 @@ The size of the image need to be increased for extra packages
 ### Basic Audio Support
 
 First, we need to enable sound card through /boot/config.txt.
-The post-build script adds this line to output/images/rpi-firmware/config.txt
+The post-image script adds this line to output/images/rpi-firmware/config.txt
 
 > dtparam=audio=on
 
-In Libraries --> Audio/ Sound Support, we enable ALSA support through alsa-lib (All)
-![alsa-lib](../assets/Menuconfig/Libraries/alsa-lib.png?raw=true)
+In Libraries --> Audio/ Sound Support, we enable ALSA support through **alsa-lib** (All)
 
-In Libraries --> Audio/ Sound Support, check port-audio with ALSA support
-![port-audio](../assets/Menuconfig/Libraries/port-alsa.png?raw=true)
+In Libraries --> Audio/ Sound Support, check **port-audio** with ALSA support
 
-
-In Target packages --> Audio/ Video, check alsa-utils (Check them all :D)
-![alsa-utils](../assets/Menuconfig/Target_Audio/alsa-utils.png?raw=true)
+In Target packages --> Audio/ Video, check **alsa-utils** (Check them all :D)
 
 In Target packages --> Audio/ Video, we need a suitable mp3 player (madplay, mpg123 ..etc).\
 For Bluetooth problems, **sox** was our best option. It can be used to play music using **play** command.
 
 ### ssh Support
 
-In Target packages --> Networking, check openssh
-![openssh](../assets/Menuconfig/Target_Network/openssh.png?raw=true)
+In Target packages --> Networking, check **openssh**
+
+Also, The post-image script adds this line to output/images/rpi-firmware/config.txt
+
+> enable_uart=1
+
+for enabling UART on the serial terminal (ttyS0).
 
 ### WiFi Support
-In Target packages --> Hardware handling --> Firmware, we need to enable WiFi firmware
-![wifi](../assets/Menuconfig/Hardware_Firmware/wifi.png?raw=true)
 
-In Target packages --> Networking, check ifupdown (Most probably, this will be already checked)
-![ifupdown](../assets/Menuconfig/Target_Network/ifupdown.png?raw=true)
+In Target packages --> Hardware handling --> Firmware, we need to enable WiFi firmware: **rpi-wifi-firmware**
 
-In Target packages --> Networking, check wpa_supplicant (Be sure to check the following options)
-![wpa](../assets/Menuconfig/Target_Network/wpa.png?raw=true)
+In Target packages --> Networking, check **ifupdown** (Most probably, this will be already checked)
+
+In Target packages --> Networking, check **wpa_supplicant** (Be sure to check the following options):
+
+- Enable nl80211 support
+- Enable autoscan
+- Install wpa_passphrase binary
 
 In mp3-overlay folder, you need to configure wpa_supplicant to your network using your ssid and password.
 /etc/wpa_supplicant/wpa_supplicant.conf
 
-You can also change IPs through
-/etc/network/interfaces
+You can also change IPs through: /etc/network/interfaces
 
 ### HDMI Support
 
 HDMI is already supported, but you will face a problem with the audio output if HDMI wasn't connected before booting.
-So, our post-build adds these lines to output/images/rpi-firmware/config.txt
+So, our post-image adds these lines to output/images/rpi-firmware/config.txt
 
 > hdmi_drive=2
 
@@ -136,11 +140,9 @@ The post-build script swaps those two in output/images/rpi-firmware/cmdline.txt
 
 In Target packages --> Hardware handling --> Firmware, we need to enable Bluetooth/WiFi chip firmware: **b43-firmware**
 
-In Target packages --> Networking, check bluez-utils 5
-![bluez-utils](../assets/Menuconfig/Target_Network/bluez-utils.png?raw=true)
+In Target packages --> Networking, check **bluez-utils 5**
 
-In Target packages --> Networking, check bluez-tools
-![bluez-tools](../assets/Menuconfig/Target_Network/bluez-tools.png?raw=true)
+In Target packages --> Networking, check **bluez-tools**
 
 Since alsa doesn't support bluez 5, we have one of 3 options:
 
@@ -156,8 +158,7 @@ Since alsa doesn't support bluez 5, we have one of 3 options:
 
 Needed packages for option 3:
 
-In Target packages --> Audio/ Video, include pulseaudio (start as system daemon)
-![pulse](../assets/Menuconfig/Target_Audio/pulseaudio.png?raw=true)
+In Target packages --> Audio/ Video, include **pulseaudio** (start as system daemon)
 
 *Our mp3-overlay changes some pulseaudio options to work on Bluetooth properly.*
 
@@ -167,8 +168,7 @@ In Target packages --> Libraries --> Audio/ Sound, include **sbc**
 
 ### Text-to-Speech
 
-In Target packages --> Audio/ Video, include espeak
-![espeak](../assets/Menuconfig/Target_Audio/espeak.png?raw=true)
+In Target packages --> Audio/ Video, include **espeak**
 
 ## Busybox config
 
