@@ -121,6 +121,11 @@ So, our post-image adds these lines to output/images/rpi-firmware/config.txt
 > hdmi_drive=2
 
 
+
+For HDMI detection, tvservice is used (userland package).
+
+In Target packages --> Hardware Handling, include **rpi-userland**
+
 To switch audio output to HDMI, just write this command:
 
 > amixer cset numid=3 2
