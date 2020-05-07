@@ -17,6 +17,4 @@ jackd -d alsa &
 #When system is powered, power on Bluetooth, and try connecting
 bluetoothctl power on
 bluetoothctl pairable on
-bluetoothctl pair 7B:6B:39:86:A5:1F
-bluetoothctl connect 7B:6B:39:86:A5:1F
-bluetoothctl trust 7B:6B:39:86:A5:1F
+bluetoothctl scan on &

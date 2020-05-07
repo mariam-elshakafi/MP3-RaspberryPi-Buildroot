@@ -1,0 +1,36 @@
+#!/bin/sh
+#
+# This service adds root to pulse-access if not already added
+#
+
+
+start() {
+    echo "Changing Pulseaudio access"
+    sed -i "/^pulse-access:x:[[:digit:]]*:pulse$/ s/$/,root/" /etc/group 2&> /dev/null
+    echo "Changed"
+}
+stop() {
+   echo "Nothing to do here"
+}
+restart() {
+	stop
+	start
+}
+
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  restart|reload)
+	restart
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
+

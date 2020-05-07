@@ -8,6 +8,7 @@ if [ $driverLoadedFlag -eq 0 ]; then
 fi
 
 #Initializing execution flags used in mp3 player script mp3Start.sh
+echo '0' > /tmp/clear_flag
 echo '0' > /tmp/start_flag                      
 echo '0' > /tmp/stop_on_next_click      
 echo '0' > /tmp/next_flag                        
@@ -40,7 +41,6 @@ find /Songs -name '*.mp3' > $songsFile
 #Main execution loop
 while :
 do
-    sh /MP3/mountsCheck.sh &
-    sh /MP3/mp3Start.sh &
+    sh /MP3/mp3Start.sh
     sleep 0.2
 done
