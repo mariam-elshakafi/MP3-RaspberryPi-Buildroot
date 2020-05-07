@@ -16,20 +16,40 @@ Mp3 player made for raspberry pi 3 using buildroot.
 - prev
 - restart
 - shuf
+- connect (This is used to connect Bluetooth manually, as there are some issues in automatic Bluetooth connection "Trust").
+- remove (This is used to disconnect Bluetooth manually and remove the device from the device list).
+
+**Note:** In case of connection problem, try *remove* then wait a bit (1-2 minutes) for scan to discover the device again, and *connect*
 
 3. Can be accessed with ssh through Ethernet (IP: 192.168.5.30), or WiFi (IP: 192.168.1.30).
 
 4. Can be accessed using serial terminal (with TTL module).
 
-5. Voice output can be audio jack or HDMI (Though automatic transition is still under construction :D).
+5. Voice output can be audio jack, HDMI, or Bluetooth. The system can switch between them automatically.
 
 6. You can insert your own songs via a Flash USB.
 If your USB is detected, the system will count how many songs available and notify you with text-to-speech.
 
-### Future Work
+## How to use
 
-1. Fully support voice over Bluetooth.
-2. Automatic redirection to available audio outputs (Audio jack, HDMI, Bluetooth).
+1. Move mp3_rpi3_defconfig to configs directory in buildroot.
+
+2. Use this command:
+> make mp3_rpi3_defconfig
+
+3. Use menuconfig to change the path to mp3_overlay, mp3-post-build.sh, and mp3-post-image.sh\
+Or you can change them manually in the mp3_rpi3_defconfig file before step 2
+
+**Note:** Be sure to include the path to mp3-post-image.sh before the default post-image.sh of Raspberry Pi, as to be executed before generating sdcard.img
+
+4. Edit the following files to suit you:
+- mp3_overlay/etc/wpa_supplicant/wpa_supplicant.conf: Add your netword ID and Password.
+- mp3_overlay/etc/network/interfaces: Change IPs to be compatible with your network.
+- mp3_overlay/MP3/audioDeviceManager.sh: Add the MAC address of your Bluetooth audio device.
+- mp3_overlayMP3/readInputs.sh: Add the MAC address of your Bluetooth audio device.
+
+5. make and enjoy :D
+
 
 ## Tutorial
 
