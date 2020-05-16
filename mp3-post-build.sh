@@ -11,5 +11,5 @@ chmod 755 ${TARGET_DIR}/MP3/audioDeviceManager.sh
 chmod 755 ${TARGET_DIR}/MP3/mainDaemon.sh
 chmod 755 ${TARGET_DIR}/MP3/mountsCheck.sh
 chmod 755 ${TARGET_DIR}/MP3/mp3Start.sh
-chmod 755 ${TARGET_DIR}/MP3/areadInputs.sh
+chmod 755 ${TARGET_DIR}/MP3/readInputs.sh
 chmod 755 ${TARGET_DIR}/MP3/startBluetooth.sh
