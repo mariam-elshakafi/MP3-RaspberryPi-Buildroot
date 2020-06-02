@@ -179,15 +179,13 @@ Since alsa doesn't support bluez 5, we have one of 3 options:
   This should be a valid option. However, there's a problem with alsa not recognizing bluealsa as a pcm, although the bluealsa configurations exist.
 
 - **ALSA + Bluez 5 + PulseAudio:**
-  This has been the most successful option. Although you'll need to install jackd server to manage access to sound card. So, ALSA wouldn't bring PulseAudio down.
+  This has been the most successful option. Although you'll need to start PulseAudio as a system daemon, and modify some configurations, so ALSA wouldn't bring PulseAudio down.
 
 Needed packages for option 3:
 
 In Target packages --> Audio/ Video, include **pulseaudio** (start as system daemon)
 
 *Our mp3-overlay changes some pulseaudio options to work on Bluetooth properly.*
-
-In Target packages --> Audio/ Video, include **jack1**
 
 In Target packages --> Libraries --> Audio/ Sound, include **sbc**
 

@@ -11,9 +11,6 @@ sleep 0.2
 /usr/libexec/bluetooth/bluetoothd &
 sleep 0.2 
 
-#Start jackd sound server so ALSA won't bring PulseAudio down
-jackd -d alsa &
-
 #When system is powered, power on Bluetooth, and try connecting
 bluetoothctl power on
 bluetoothctl pairable on
